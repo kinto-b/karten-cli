@@ -1,4 +1,4 @@
-# Karten CLI
+# Karten CLI (WIP)
 
 A simple CLI application for creating German vocabulary flashcards from Kindle dictionary lookups using generative AI. It is very geared to my tastes so your milage may vary. Pull requests are of course welcome.
 
@@ -16,7 +16,7 @@ You'll need a key for Google's Generative Language service. Once you've got one,
 $ export GOOGLE_API_KEY="your_key"
 ```
 
-otherwise you'll need to pass the key around all the time
+otherwise you'll need to pass the key around all the time, e.g.
 
 ```bash
 $ karten card befassen --key "your_key"
@@ -24,7 +24,7 @@ $ karten card befassen --key "your_key"
 
 ## Basic usage
 
-The core of the application is a function which sends a word to the Google Gemini and requests back a flashcard. 
+The core of the application is a function which sends a word to Google Gemini and requests back a flashcard. 
 
 ```bash
 $ karten card befassen
@@ -84,7 +84,7 @@ umarbeiten,to rework; to revise; to redo,hat umgearbeitet | arbeitete um,an+Dat.
 
 ## Usage with Kindle
 
-If you've got the 'vocabulary builder' feature turned on on your Kindle, you'll be able to create flashcards by extracting your dictionary lookups. Simply plug in your Kindle, find it which drive it is at (for me thats' `D:/`), and then run
+If you've got the 'vocabulary builder' feature turned on on your Kindle, you'll be able to create flashcards by extracting your dictionary lookups. Simply plug in your Kindle, find out which drive it is at (for me thats' `D:/`), and then run
 
 ```bash
 $ karten kindle-deck D:/ --file=./cards.csv
