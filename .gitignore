@@ -1,0 +1,5 @@
+.env
+test.txt
+.venv/*
+karten/__pycache__/*
+*.egg-info/
