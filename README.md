@@ -90,7 +90,7 @@ If you've got the 'vocabulary builder' feature turned on on your Kindle, you'll 
 $ karten kindle-deck D:/ --file=./cards.csv
 ```
 
-This will extract the dictionary lookups from your kindle and export flashcards to `./cards`
+This will extract the dictionary lookups from your kindle and export flashcards to `./cards.csv`
 
 You might prefer to inspect the words before you create cards for them. There will undoubtedly be a bit of dreck in there, so you might be able to save some cloud credits by editing the word list before using it to create cards. You can export just the raw kindle lookups using
 
