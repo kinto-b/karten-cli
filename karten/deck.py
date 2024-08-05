@@ -13,13 +13,11 @@ def deck_collect(words: Iterable[str], key: str) -> list[CardFormatted]:
     return [card_format(card_collect(word, key)) for word in words]
 
 
-def deck_write(deck: Iterable[CardFormatted], file: str, append: bool) -> None:
-    """Write a deck of cards as CSV"""
-    mode = "a" if append else "w"
-    with open(file, mode, encoding="utf8") as stream:
-        writer = csv.DictWriter(stream, CARD_FIELDS)
-        for card in deck:
-            writer.writerow(card)
+def deck_write(deck: Iterable[CardFormatted], stream: str) -> None:
+    """Write a deck of cards as CSV to the stream"""
+    writer = csv.DictWriter(stream, CARD_FIELDS, lineterminator="\n")
+    for card in deck:
+        writer.writerow(card)
 
 
 def deck_read(file: str) -> list[CardFormatted]:

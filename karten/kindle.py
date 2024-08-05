@@ -3,7 +3,7 @@
 import sqlite3
 
 
-def kindle_read(vocab_db: str, lang: str) -> set[str]:
+def kindle_read(vocab_db: str, lang: str) -> list[str]:
     """Read words in a given language from the Kindle vocab.db"""
     con = sqlite3.connect(vocab_db)
     cursor = con.cursor()
@@ -12,8 +12,8 @@ def kindle_read(vocab_db: str, lang: str) -> set[str]:
         (lang,),
     )
 
-    words = set()
+    words = []
     for (word,) in cursor.fetchall():
-        words.add(word)
+        words.append(word)
 
     return words

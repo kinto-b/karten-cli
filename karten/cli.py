@@ -2,6 +2,7 @@
 
 import json
 import os
+from typing import Iterable
 
 import click
 
@@ -33,7 +34,12 @@ def card(word, key):
 
 @cli.command()
 @click.argument("words", nargs=-1)
-@click.argument("output", type=click.Path())
+@click.option(
+    "--file",
+    default="-",
+    type=click.Path(),
+    help="The filepath to redirect the output to",
+)
 @click.option(
     "--append",
     default=1,
@@ -46,14 +52,19 @@ def card(word, key):
     default=os.getenv("GOOGLE_API_KEY"),
     help="API key for authentication. Defaults to GOOGLE_API_KEY environment variable.",
 )
-def deck(words, output, append, key):
+def deck(words, file, append, key):
     """Creates a csv of cards ready for import into Anki (or equivalent)"""
-    _create_deck(set(words), output, append, key)
+    _create_deck(words, file, append, key)
 
 
 @cli.command()
 @click.argument("kindle_dir", type=click.Path())
-@click.argument("output", type=click.Path())
+@click.option(
+    "--file",
+    default="-",
+    type=click.Path(),
+    help="The filepath to redirect the output to",
+)
 @click.option(
     "--lang",
     default="de",
@@ -71,7 +82,7 @@ def deck(words, output, append, key):
     default=os.getenv("GOOGLE_API_KEY"),
     help="API key for authentication. Defaults to GOOGLE_API_KEY environment variable.",
 )
-def kindle_deck(kindle_dir, output, lang, append, key):
+def kindle_deck(kindle_dir, file, lang, append, key):
     """
     Creates a csv of cards ready for import into Anki (or equivalent) using
     the vocabulary lookups in language LANG from the kindle at KINDLE_DIR.
@@ -83,16 +94,20 @@ def kindle_deck(kindle_dir, output, lang, append, key):
 
     db = os.path.join(kindle_dir, "system", "vocabulary", "vocab.db")
     words = kindle_read(db, lang)
-    _create_deck(words, output, append, key)
+    _create_deck(words, file, append, key)
 
 
-def _create_deck(words: set[str], output: str, append: bool, key: str) -> None:
+def _create_deck(words: Iterable[str], file: str, append: bool, key: str) -> None:
     """Adds cards for new words to the deck at OUTPUT"""
-    append = append and os.path.exists(output)
+    append = append and os.path.exists(file)
     if append:
-        old_deck = deck_read(output)
-        old_words = set([d["word"] for d in old_deck])
-        words = words.difference(old_words)
+        old_deck = deck_read(file)
+        old_words = set(d["word"] for d in old_deck)
+        words = set(words).difference(old_words)
+
+    if not words:
+        click.echo("No new words. Aborting...")
+        return
 
     if not click.confirm(f"Processing {len(words)} card(s). Ready to continue?"):
         click.echo("Aborting...")
@@ -101,7 +116,30 @@ def _create_deck(words: set[str], output: str, append: bool, key: str) -> None:
     with click.progressbar(words) as progress:
         deck = deck_collect(progress, key)  # pylint: disable=redefined-outer-name
 
-    deck_write(deck, output, append)
+    mode = "a" if append else "w"
+    with click.open_file(file, mode, encoding="utf8") as stream:
+        deck_write(deck, stream)
+
+
+@cli.command()
+@click.argument("kindle_dir", type=click.Path())
+@click.option(
+    "--lang",
+    default="de",
+    help="The ISO 639 code of the target language. Currently only 'de' supported.",
+)
+def kindle_words(kindle_dir, lang):
+    """
+    Extract the words from your Kindle dictionary lookups.
+    """
+
+    if lang != "de":
+        click.echo(f"Error: LANG='{lang}' not supported")
+
+    db = os.path.join(kindle_dir, "system", "vocabulary", "vocab.db")
+    words = kindle_read(db, lang)
+    for word in words:
+        click.echo(word)
 
 
 if __name__ == "__main__":
