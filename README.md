@@ -84,7 +84,7 @@ umarbeiten,to rework; to revise; to redo,hat umgearbeitet | arbeitete um,an+Dat.
 
 You can import the .csv into Anki to get cards like this,
 
-![Example Anki cards after import](./assets/example-deck.png)
+![Example Anki cards after import](./assets/example-card.png)
 
 (First download and import the example deck at [./assets/example-deck.apkg](./assets/example-deck.apkg), which contains a card-type with all the required fields.)
 
