@@ -82,6 +82,12 @@ witzig,funny; humorous,,,Der Film war wirklich witzig.<br/><br/>Er erzählt imme
 umarbeiten,to rework; to revise; to redo,hat umgearbeitet | arbeitete um,an+Dat.
 ```
 
+You can import the .csv into Anki to get cards like this,
+
+![Example Anki cards after import](./assets/example-deck.png)
+
+(First download and import the example deck at [./assets/example-deck.apkg](./assets/example-deck.apkg), which contains a card-type with all the required fields.)
+
 ## Usage with Kindle
 
 If you've got the 'vocabulary builder' feature turned on on your Kindle, you'll be able to create flashcards by extracting your dictionary lookups. Simply plug in your Kindle, find out which drive it is at (for me thats' `D:/`), and then run
