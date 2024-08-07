@@ -1,5 +1,10 @@
 .env
-test.txt
 .venv/*
-karten/__pycache__/*
 *.egg-info/
+karten/__pycache__/*
+
+.pytest_cache/*
+tests/__pycache__/*
+.coverage
+
+scratch/*

@@ -15,7 +15,10 @@ grpcio==1.65.4
 grpcio-status==1.62.2
 httplib2==0.22.0
 idna==3.7
--e git+https://github.com/kinto-b/karten-cli.git@0338c62584deb9a9972db6379454d98a879be548#egg=karten
+iniconfig==2.0.0
+-e git+https://github.com/kinto-b/karten-cli.git@1cd0c882749f735be833a285e8e3854e8a15572f#egg=karten
+packaging==24.1
+pluggy==1.5.0
 proto-plus==1.24.0
 protobuf==4.25.4
 pyasn1==0.6.0
@@ -23,6 +26,7 @@ pyasn1_modules==0.4.0
 pydantic==2.8.2
 pydantic_core==2.20.1
 pyparsing==3.1.2
+pytest==8.3.2
 requests==2.32.3
 rsa==4.9
 setuptools==72.1.0
