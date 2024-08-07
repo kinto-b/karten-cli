@@ -61,25 +61,22 @@ $ karten card befassen
 You probably won't use this function directly. Instead of a JSON representation of a single card, you'll probably want a CSV representation of a whole deck of cards, which you can import into Anki (or whatever flashcard app you use). If you already have a list of words, then use
 
 ```bash
-$ karten deck Erinnerung witzig verschwören --file=./cards.csv
+$ karten deck bereuen hartnäckig --file=./cards.csv
 $ cat ./cards.csv | cut -c -80
 
-Erinnerung,memory; reminder,,an+Akk. | an+Dat. | über+Akk.,Die Erinnerung an de
-verschwören,to conspire; to swear (an oath),verschwor | hat verschworen,gegen+A
-witzig,funny; humorous,,,Der Film war wirklich witzig.<br/><br/>Er erzählt imme
+bereuen,verb,to regret,hat bereut | bereute,"Ich bereue es, dass ich nicht mehr 
+hartnäckig,adjective,persistent; stubborn; tenacious,hartnäckiger | am hartnä
 ```
 
-If you point to the same output, by default new cards will be *appended*. Duplicates will be avoided. For example, notice that 'umarbeiten' gets added but 'witzig' is not duplicated if we now call:
+If you point to the same output, by default new cards will be *appended*. Duplicates will be avoided. For example, notice that 'Verschwörung' gets added but 'bereuen' is not duplicated if we now call:
 
 
 ```bash
-$ karten deck witzig umarbeiten --file=./cards.csv
+$ karten deck bereuen Verschwörung --file=./cards.csv
 $ cat ./cards.csv | cut -c -80
-
-Erinnerung,memory; reminder,,an+Akk. | an+Dat. | über+Akk.,Die Erinnerung an de
-verschwören,to conspire; to swear (an oath),verschwor | hat verschworen,gegen+A
-witzig,funny; humorous,,,Der Film war wirklich witzig.<br/><br/>Er erzählt imme
-umarbeiten,to rework; to revise; to redo,hat umgearbeitet | arbeitete um,an+Dat.
+bereuen,verb,to regret,hat bereut | bereute,"Ich bereue es, dass ich nicht mehr 
+hartnäckig,adjective,persistent; stubborn; tenacious,hartnäckiger | am hartnä
+die Verschwörung,noun,conspiracy,die Verschwörungen,Es gibt viele Verschwörun
 ```
 
 You can import the .csv into Anki to get cards like this,
