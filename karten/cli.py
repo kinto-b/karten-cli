@@ -9,6 +9,13 @@ import click
 from .card import card_collect
 from .deck import deck_collect, deck_read, deck_write
 from .kindle import kindle_read
+from .cli_options import (
+    option_append,
+    option_file,
+    option_key,
+    option_lang,
+    option_prompt,
+)
 
 
 @click.group()
@@ -18,11 +25,7 @@ def cli():  # pylint: disable=missing-docstring
 
 @cli.command()
 @click.argument("word")
-@click.option(
-    "--key",
-    default=os.getenv("GOOGLE_API_KEY"),
-    help="API key for authentication. Defaults to GOOGLE_API_KEY environment variable.",
-)
+@option_key
 def card(word, key):
     """Fetch and display JSON data for WORD"""
     if not key:
@@ -34,55 +37,23 @@ def card(word, key):
 
 @cli.command()
 @click.argument("words", nargs=-1)
-@click.option(
-    "--file",
-    default="-",
-    type=click.Path(),
-    help="The filepath to redirect the output to",
-)
-@click.option(
-    "--append",
-    default=1,
-    type=click.BOOL,
-    help="A flag determining whether words are appended to OUTPUT.\
-        If true, duplicates will be excluded.",
-)
-@click.option(
-    "--key",
-    default=os.getenv("GOOGLE_API_KEY"),
-    help="API key for authentication. Defaults to GOOGLE_API_KEY environment variable.",
-)
-def deck(words, file, append, key):
+@option_file
+@option_append
+@option_key
+@option_prompt
+def deck(words, file, append, key, prompt):
     """Creates a csv of cards ready for import into Anki (or equivalent)"""
-    _create_deck(words, file, append, key)
+    _create_deck(words, file, append, key, prompt)
 
 
 @cli.command()
 @click.argument("kindle_dir", type=click.Path())
-@click.option(
-    "--file",
-    default="-",
-    type=click.Path(),
-    help="The filepath to redirect the output to",
-)
-@click.option(
-    "--lang",
-    default="de",
-    help="The ISO 639 code of the target language. Currently only 'de' supported.",
-)
-@click.option(
-    "--append",
-    default=1,
-    type=click.BOOL,
-    help="A flag determining whether words are appended to OUTPUT.\
-        If true, duplicates will be excluded.",
-)
-@click.option(
-    "--key",
-    default=os.getenv("GOOGLE_API_KEY"),
-    help="API key for authentication. Defaults to GOOGLE_API_KEY environment variable.",
-)
-def kindle_deck(kindle_dir, file, lang, append, key):
+@option_file
+@option_lang
+@option_append
+@option_key
+@option_prompt
+def kindle_deck(kindle_dir, file, lang, append, key, prompt):
     """
     Creates a csv of cards ready for import into Anki (or equivalent) using
     the vocabulary lookups in language LANG from the kindle at KINDLE_DIR.
@@ -94,10 +65,12 @@ def kindle_deck(kindle_dir, file, lang, append, key):
 
     db = os.path.join(kindle_dir, "system", "vocabulary", "vocab.db")
     words = kindle_read(db, lang)
-    _create_deck(words, file, append, key)
+    _create_deck(words, file, append, key, prompt)
 
 
-def _create_deck(words: Iterable[str], file: str, append: bool, key: str) -> None:
+def _create_deck(
+    words: Iterable[str], file: str, append: bool, key: str, prompt: bool
+) -> None:
     """Adds cards for new words to the deck at OUTPUT"""
     append = append and os.path.exists(file)
     if append:
@@ -109,7 +82,9 @@ def _create_deck(words: Iterable[str], file: str, append: bool, key: str) -> Non
         click.echo("No new words. Aborting...")
         return
 
-    if not click.confirm(f"Processing {len(words)} card(s). Ready to continue?"):
+    if prompt and not click.confirm(
+        f"Processing {len(words)} card(s). Ready to continue?"
+    ):
         click.echo("Aborting...")
         return
 
@@ -123,11 +98,7 @@ def _create_deck(words: Iterable[str], file: str, append: bool, key: str) -> Non
 
 @cli.command()
 @click.argument("kindle_dir", type=click.Path())
-@click.option(
-    "--lang",
-    default="de",
-    help="The ISO 639 code of the target language. Currently only 'de' supported.",
-)
+@option_lang
 def kindle_words(kindle_dir, lang):
     """
     Extract the words from your Kindle dictionary lookups.
