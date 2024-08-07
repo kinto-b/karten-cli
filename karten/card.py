@@ -11,9 +11,9 @@ from .prompt import CONTEXT_PROMPT
 
 CARD_FIELDS = (
     "word",
+    "category",
     "definition",
     "forms",
-    "preposition",
     "example",
     "reverse",
     "notes",
@@ -24,9 +24,9 @@ class Card(typing.TypedDict):
     """Card response schema"""
 
     word: str
+    category: str
     definition: list[str]
     forms: list[str]
-    preposition: list[str]
     example: list[str]
     reverse: list[str]
     notes: list[str]
@@ -36,9 +36,9 @@ class CardFormatted(typing.TypedDict):
     """Formatted card schema"""
 
     word: str
+    category: str
     definition: str
     forms: str
-    preposition: str
     example: str
     reverse: str
     notes: str
@@ -74,7 +74,6 @@ def card_format(card: Card) -> CardFormatted:
     """Format a card so that it can be written as CSV"""
     card["definition"] = "; ".join(card["definition"])
     card["forms"] = " | ".join(card["forms"])
-    card["preposition"] = " | ".join(card["preposition"])
     card["example"] = "<br/><br/>".join(card["example"])
     card["reverse"] = "<br/><br/>".join(card["reverse"])
     card["notes"] = "; ".join(card["notes"])
