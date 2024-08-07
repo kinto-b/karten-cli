@@ -15,7 +15,6 @@ I will give you a word and I want you to give me a card formatted as JSON with t
   + the comparative and superlative if it's an adjective (e.g. ['witziger', 'am witizgsten']).
 - example: a few sentences using the word in German. These should should the usage with the different prepositions and different cases.
 - reverse: the example sentences translated into English.
-- note: any particularly important information about a word's usage
 
 Here's two examples
 
@@ -32,7 +31,6 @@ Here's two examples
     "I will pick you up at the train station.",
     "He picked up the package at the post office."
   ],
-  "notes": ["Trennbares Verb"]
 }
 
 {
@@ -42,6 +40,5 @@ Here's two examples
   "forms": ["die Schlägereien"],
   "example": ["Es gab eine Schlägerei zwischen zwei Männern."],
   "reverse": ["There was a brawl between two men."],
-  "notes": ["feminine noun"]
 }
 """

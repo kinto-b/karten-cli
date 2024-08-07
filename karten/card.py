@@ -16,7 +16,6 @@ CARD_FIELDS = (
     "forms",
     "example",
     "reverse",
-    "notes",
 )
 
 
@@ -29,7 +28,6 @@ class Card(typing.TypedDict):
     forms: list[str]
     example: list[str]
     reverse: list[str]
-    notes: list[str]
 
 
 class CardFormatted(typing.TypedDict):
@@ -41,7 +39,6 @@ class CardFormatted(typing.TypedDict):
     forms: str
     example: str
     reverse: str
-    notes: str
 
 
 def initialise_model(key: str) -> genai.GenerativeModel:
@@ -76,5 +73,4 @@ def card_format(card: Card) -> CardFormatted:
     card["forms"] = " | ".join(card["forms"])
     card["example"] = "<br/><br/>".join(card["example"])
     card["reverse"] = "<br/><br/>".join(card["reverse"])
-    card["notes"] = "; ".join(card["notes"])
     return card
