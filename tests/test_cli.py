@@ -12,7 +12,7 @@ from karten.card import Card, card_format
 from karten.deck import deck_read, deck_write
 
 
-def mock_card_collect(word, key):  # pylint: disable=unused-argument
+def mock_card_collect(word, model):  # pylint: disable=unused-argument
     """Overwrite the function which serves cards using the LLM"""
     return Card(
         word=word,
@@ -21,7 +21,6 @@ def mock_card_collect(word, key):  # pylint: disable=unused-argument
         forms=["form1", "form2"],
         example=["ex1", "ex2"],
         reverse=["rev1", "rev2"],
-        notes=["note"],
     )
 
 
@@ -41,12 +40,12 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_card.assert_called()
 
-        expected = [card_format(mock_card_collect(e, "")) for e in expected]
+        expected = [card_format(mock_card_collect(e, None)) for e in expected]
         output = deck_read(file)
         for e, o in zip(expected, output):
             self.assertDictEqual(e, o)
 
-    @patch("karten.deck.card_collect", side_effect=mock_card_collect)
+    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_file_fresh(self, mock_card):
         """Test deck command with a fresh file"""
         with TemporaryFile("w+", delete=False) as file:
@@ -59,13 +58,13 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.deck.card_collect", side_effect=mock_card_collect)
+    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_file_append(self, mock_card):
         """Test deck command with a pre-existing file"""
         with TemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
-            deck_write([card_format(mock_card_collect("skip", ""))], file)
+            deck_write([card_format(mock_card_collect("skip", None))], file)
 
         words = ["some", "words", "skip"]
         expected = [
