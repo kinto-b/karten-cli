@@ -6,8 +6,8 @@ from typing import Iterable
 
 import click
 
-from .card import card_collect
-from .deck import deck_collect, deck_read, deck_write
+from .card import initialise_model, card_collect, card_format, CardError
+from .deck import deck_read, deck_write
 from .kindle import kindle_read
 from .cli_options import (
     option_append,
@@ -31,8 +31,12 @@ def card(word, key):
     if not key:
         click.echo("Error: API key must be provided.")
         return
-    card = card_collect(word, key)  # pylint: disable=redefined-outer-name
-    click.echo(json.dumps(card, indent=2))
+    model = initialise_model(key)
+    try:
+        card = card_collect(word, model)  # pylint: disable=redefined-outer-name
+        click.echo(json.dumps(card, indent=2))
+    except CardError:
+        click.echo(f"Card could not be created for: {word}")
 
 
 @cli.command()
@@ -88,8 +92,20 @@ def _create_deck(
         click.echo("Aborting...")
         return
 
+    model = initialise_model(key)
+    deck, err = [], []  # pylint: disable=redefined-outer-name
     with click.progressbar(words) as progress:
-        deck = deck_collect(progress, key)  # pylint: disable=redefined-outer-name
+        for word in progress:
+            try:
+                card = card_collect(word, model)  # pylint: disable=redefined-outer-name
+                deck.append(card_format(card))
+            except CardError:
+                err.append(word)
+
+    if err:
+        click.echo(f"Failed to create cards for: {', '.join(err)}")
+    if not deck:
+        return
 
     mode = "a" if append else "w"
     with click.open_file(file, mode, encoding="utf8") as stream:

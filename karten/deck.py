@@ -5,12 +5,7 @@ Manage CSV decks of flashcards
 from typing import Iterable
 import csv
 
-from .card import card_format, card_collect, CardFormatted, CARD_FIELDS
-
-
-def deck_collect(words: Iterable[str], key: str) -> list[CardFormatted]:
-    """Collect a deck of cards"""
-    return [card_format(card_collect(word, key)) for word in words]
+from .card import CardFormatted, CARD_FIELDS
 
 
 def deck_write(deck: Iterable[CardFormatted], stream: str) -> None:

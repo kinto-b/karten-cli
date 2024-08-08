@@ -41,6 +41,10 @@ class CardFormatted(typing.TypedDict):
     reverse: str
 
 
+class CardError(Exception):
+    """Card could not be created"""
+
+
 def initialise_model(key: str) -> genai.GenerativeModel:
     """Initialises a model"""
     genai.configure(api_key=key)
@@ -59,12 +63,14 @@ def card_prompt(word: str) -> str:
     return CONTEXT_PROMPT + f"\n\nWord: {word}"
 
 
-def card_collect(word: str, key: str) -> Card:
+def card_collect(word: str, model: genai.GenerativeModel) -> Card:
     """Creates a card using Google LLM"""
-    model = initialise_model(key)
     prompt = card_prompt(word)
     response = model.generate_content(prompt)
-    return json.loads(response.text)
+    try:
+        return json.loads(response.text)
+    except ValueError as e:
+        raise CardError(f"Card could not be created for {word}") from e
 
 
 def card_format(card: Card) -> CardFormatted:

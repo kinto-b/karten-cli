@@ -38,7 +38,7 @@ def option_prompt(func):
     """Prompt for confirmation?"""
     return click.option(
         "--prompt/--no-prompt",
-        " /-p",
+        "-p/ ",
         default=False,
         help="Whether to ask for confirmation before producing cards",
     )(func)
