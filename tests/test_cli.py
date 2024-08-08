@@ -1,6 +1,6 @@
 """Test CLI commands"""
 
-from tempfile import TemporaryFile
+from tempfile import NamedTemporaryFile
 import os
 
 import unittest
@@ -60,7 +60,7 @@ class TestCLI(unittest.TestCase):
     @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_file_fresh(self, mock_card):
         """Test deck command with a fresh file"""
-        with TemporaryFile("w+", delete=False) as file:
+        with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
 
         words = ["some", "words"]
@@ -73,7 +73,7 @@ class TestCLI(unittest.TestCase):
     @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_some_fail(self, mock_card):
         """Test deck command with a fresh file"""
-        with TemporaryFile("w+", delete=False) as file:
+        with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
 
         words = ["some", "fail", "words"]
@@ -87,7 +87,7 @@ class TestCLI(unittest.TestCase):
     @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_all_fail(self, mock_card):
         """Test deck command with a fresh file"""
-        with TemporaryFile("w+", delete=False) as file:
+        with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
 
         words = ["fail", "fail"]
@@ -100,7 +100,7 @@ class TestCLI(unittest.TestCase):
     @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_file_append(self, mock_card):
         """Test deck command with a pre-existing file"""
-        with TemporaryFile("w+", delete=False) as file:
+        with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
             deck_write([card_format(mock_card_collect("first", None))], file)
