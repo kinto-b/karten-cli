@@ -9,12 +9,15 @@ from unittest.mock import patch
 from click.testing import CliRunner
 
 from karten.cli import cli
-from karten.card import Card, card_format
+from karten.card import Card, CardError, card_format
 from karten.deck import deck_read, deck_write
 
 
 def mock_card_collect(word, model):  # pylint: disable=unused-argument
     """Overwrite the function which serves cards using the LLM"""
+    if word == "fail":
+        raise CardError("Fail!")
+
     return Card(
         word=word,
         category="cat",
@@ -25,7 +28,8 @@ def mock_card_collect(word, model):  # pylint: disable=unused-argument
     )
 
 
-def mock_kindle_connect(kindle_dir: str) -> sqlite3.Connection:
+def mock_kindle_connect(kindle_dir):  # pylint: disable=unused-argument
+    """Connect to test vocab file"""
     fp = os.path.join(os.path.dirname(__file__), "vocab.db")
     return sqlite3.connect(fp)
 
@@ -51,6 +55,8 @@ class TestCLI(unittest.TestCase):
         for e, o in zip(expected, output):
             self.assertDictEqual(e, o)
 
+        return result
+
     @patch("karten.cli.card_collect", side_effect=mock_card_collect)
     def test_deck_file_fresh(self, mock_card):
         """Test deck command with a fresh file"""
@@ -61,6 +67,33 @@ class TestCLI(unittest.TestCase):
 
         try:
             self.helper_deck(fp, words, words, mock_card)
+        finally:
+            os.remove(fp)
+
+    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
+    def test_deck_some_fail(self, mock_card):
+        """Test deck command with a fresh file"""
+        with TemporaryFile("w+", delete=False) as file:
+            fp = file.name
+
+        words = ["some", "fail", "words"]
+        expected = ["some", "words"]
+        try:
+            res = self.helper_deck(fp, words, expected, mock_card)
+            self.assertIn("Failed to create cards for: fail", res.output)
+        finally:
+            os.remove(fp)
+
+    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
+    def test_deck_all_fail(self, mock_card):
+        """Test deck command with a fresh file"""
+        with TemporaryFile("w+", delete=False) as file:
+            fp = file.name
+
+        words = ["fail", "fail"]
+        try:
+            res = self.helper_deck(fp, words, [], mock_card)
+            self.assertIn("Failed to create cards for: fail, fail", res.output)
         finally:
             os.remove(fp)
 
