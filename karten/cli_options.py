@@ -23,24 +23,13 @@ def option_key(func):
     )(func)
 
 
-def option_append(func):
-    """Append words or overwrite pre-existing file?"""
+def option_date_from(func):
+    """Extract lookups from this date on"""
     return click.option(
-        "--append",
-        default=1,
-        type=click.BOOL,
-        help="A flag determining whether words are appended to OUTPUT.\
-            If true, duplicates will be excluded.",
-    )(func)
-
-
-def option_prompt(func):
-    """Prompt for confirmation?"""
-    return click.option(
-        "--prompt/--no-prompt",
-        "-p/ ",
-        default=False,
-        help="Whether to ask for confirmation before producing cards",
+        "--date-from",
+        default="2000-01-01",
+        type=click.DateTime(),
+        help="Only Kindle lookups from this date on are included",
     )(func)
 
 

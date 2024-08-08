@@ -7,15 +7,9 @@ from typing import Iterable
 import click
 
 from .card import initialise_model, card_collect, card_format, CardError
-from .deck import deck_read, deck_write
+from .deck import deck_write
 from .kindle import kindle_read
-from .cli_options import (
-    option_append,
-    option_file,
-    option_key,
-    option_lang,
-    option_prompt,
-)
+from .cli_options import option_date_from, option_file, option_key, option_lang
 
 
 @click.group()
@@ -42,22 +36,19 @@ def card(word, key):
 @cli.command()
 @click.argument("words", nargs=-1)
 @option_file
-@option_append
 @option_key
-@option_prompt
-def deck(words, file, append, key, prompt):
+def deck(words, file, key):
     """Creates a csv of cards ready for import into Anki (or equivalent)"""
-    _create_deck(words, file, append, key, prompt)
+    _create_deck(words, file, key)
 
 
 @cli.command()
 @click.argument("kindle_dir", type=click.Path())
 @option_file
 @option_lang
-@option_append
+@option_date_from
 @option_key
-@option_prompt
-def kindle_deck(kindle_dir, file, lang, append, key, prompt):
+def kindle_deck(kindle_dir, file, lang, date_from, key):
     """
     Creates a csv of cards ready for import into Anki (or equivalent) using
     the vocabulary lookups in language LANG from the kindle at KINDLE_DIR.
@@ -67,30 +58,13 @@ def kindle_deck(kindle_dir, file, lang, append, key, prompt):
     if lang != "de":
         click.echo(f"Error: LANG='{lang}' not supported")
 
-    db = os.path.join(kindle_dir, "system", "vocabulary", "vocab.db")
-    words = kindle_read(db, lang)
-    _create_deck(words, file, append, key, prompt)
+    words = kindle_read(kindle_dir, lang, date_from)
+    _create_deck(words, file, key)
 
 
-def _create_deck(
-    words: Iterable[str], file: str, append: bool, key: str, prompt: bool
-) -> None:
+def _create_deck(words: Iterable[str], file: str, key: str) -> None:
     """Adds cards for new words to the deck at OUTPUT"""
-    append = append and os.path.exists(file)
-    if append:
-        old_deck = deck_read(file)
-        old_words = set(d["word"] for d in old_deck)
-        words = set(words).difference(old_words)
-
-    if not words:
-        click.echo("No new words. Aborting...")
-        return
-
-    if prompt and not click.confirm(
-        f"Processing {len(words)} card(s). Ready to continue?"
-    ):
-        click.echo("Aborting...")
-        return
+    append = os.path.exists(file)
 
     model = initialise_model(key)
     deck, err = [], []  # pylint: disable=redefined-outer-name
@@ -115,7 +89,8 @@ def _create_deck(
 @cli.command()
 @click.argument("kindle_dir", type=click.Path())
 @option_lang
-def kindle_words(kindle_dir, lang):
+@option_date_from
+def kindle_words(kindle_dir, lang, date_from):
     """
     Extract the words from your Kindle dictionary lookups.
     """
@@ -123,8 +98,7 @@ def kindle_words(kindle_dir, lang):
     if lang != "de":
         click.echo(f"Error: LANG='{lang}' not supported")
 
-    db = os.path.join(kindle_dir, "system", "vocabulary", "vocab.db")
-    words = kindle_read(db, lang)
+    words = kindle_read(kindle_dir, lang, date_from)
     for word in words:
         click.echo(word)
 

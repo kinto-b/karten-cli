@@ -4,6 +4,7 @@ from tempfile import TemporaryFile
 import os
 
 import unittest
+import sqlite3
 from unittest.mock import patch
 from click.testing import CliRunner
 
@@ -22,6 +23,11 @@ def mock_card_collect(word, model):  # pylint: disable=unused-argument
         example=["ex1", "ex2"],
         reverse=["rev1", "rev2"],
     )
+
+
+def mock_kindle_connect(kindle_dir: str) -> sqlite3.Connection:
+    fp = os.path.join(os.path.dirname(__file__), "vocab.db")
+    return sqlite3.connect(fp)
 
 
 class TestCLI(unittest.TestCase):
@@ -64,21 +70,24 @@ class TestCLI(unittest.TestCase):
         with TemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
-            deck_write([card_format(mock_card_collect("skip", None))], file)
+            deck_write([card_format(mock_card_collect("first", None))], file)
 
-        words = ["some", "words", "skip"]
-        expected = [
-            "skip",
-            "some",
-            "words",
-        ]  # 'skip' should come first, we're appending!
-
+        words = ["some", "words"]
+        expected = ["first", "some", "words"]
         try:
             self.helper_deck(fp, words, expected, mock_card)
         finally:
             os.remove(fp)
 
-    # TODO: test kindle functions
+    @patch("karten.kindle.kindle_connect", side_effect=mock_kindle_connect)
+    def test_kindle_read(self, mock_connect):
+        """Test reading words from Kindle"""
+        result = self.runner.invoke(
+            cli,
+            ["kindle-words", ".", "--date-from", "2024-08-01"],
+        )
+        mock_connect.assert_called()
+        self.assertEqual("Wams\nfesch\n", result.output)
 
 
 if __name__ == "__main__":
