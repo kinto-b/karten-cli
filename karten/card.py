@@ -53,7 +53,7 @@ def initialise_model(key: str) -> genai.GenerativeModel:
         generation_config={
             "candidate_count": 1,
             "response_mime_type": "application/json",
-            "response_schema": Card,
+            # "response_schema": Card,
         },
     )
 
