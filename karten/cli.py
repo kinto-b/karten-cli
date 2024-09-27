@@ -9,7 +9,13 @@ import click
 from .card import initialise_model, card_collect, card_format, CardError
 from .deck import deck_write
 from .kindle import kindle_read
-from .cli_options import option_date_from, option_file, option_key, option_lang
+from .cli_options import (
+    option_model,
+    option_date_from,
+    option_file,
+    option_key,
+    option_lang,
+)
 
 
 @click.group()
@@ -20,26 +26,28 @@ def cli():  # pylint: disable=missing-docstring
 @cli.command()
 @click.argument("word")
 @option_key
-def card(word, key):
+@option_model
+def card(word, key, model):
     """Fetch and display JSON data for WORD"""
     if not key:
         click.echo("Error: API key must be provided.")
         return
-    model = initialise_model(key)
+    model = initialise_model(key, model)
     try:
         card = card_collect(word, model)  # pylint: disable=redefined-outer-name
         click.echo(json.dumps(card, indent=2))
-    except CardError:
-        click.echo(f"Card could not be created for: {word}")
+    except CardError as e:
+        click.echo(e)
 
 
 @cli.command()
 @click.argument("words", nargs=-1)
 @option_file
 @option_key
-def deck(words, file, key):
+@option_model
+def deck(words, file, key, model):
     """Creates a csv of cards ready for import into Anki (or equivalent)"""
-    _create_deck(words, file, key)
+    _create_deck(words, file, key, model)
 
 
 @cli.command()
@@ -48,7 +56,8 @@ def deck(words, file, key):
 @option_lang
 @option_date_from
 @option_key
-def kindle_deck(kindle_dir, file, lang, date_from, key):
+@option_model
+def kindle_deck(kindle_dir, file, lang, date_from, key, model):
     """
     Creates a csv of cards ready for import into Anki (or equivalent) using
     the vocabulary lookups in language LANG from the kindle at KINDLE_DIR.
@@ -59,14 +68,14 @@ def kindle_deck(kindle_dir, file, lang, date_from, key):
         click.echo(f"Error: LANG='{lang}' not supported")
 
     words = kindle_read(kindle_dir, lang, date_from)
-    _create_deck(words, file, key)
+    _create_deck(words, file, key, model)
 
 
-def _create_deck(words: Iterable[str], file: str, key: str) -> None:
+def _create_deck(words: Iterable[str], file: str, key: str, model: str) -> None:
     """Adds cards for new words to the deck at OUTPUT"""
     append = os.path.exists(file)
 
-    model = initialise_model(key)
+    model = initialise_model(key, model)
     deck, err = [], []  # pylint: disable=redefined-outer-name
     with click.progressbar(words) as progress:
         for word in progress:

@@ -97,6 +97,9 @@ $ words=$(<words.txt tr -d '\r' | tr '\n' ' ')
 $ karten deck $words --file=./cards.csv
 ```
 
+## A note on costs
+
+I created about 250 cards at a cost of 0.03 euros before deciding to switch the default from the cheaper `gemini-1.5-flash` model to the more powerful `gemini-1.5-pro` model. Using the more powerful model, I would expect the costs to be 15-20 times higher, which will make 250 cards cost roughly 0.50 euros.
 
 
 

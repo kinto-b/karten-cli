@@ -45,11 +45,11 @@ class CardError(Exception):
     """Card could not be created"""
 
 
-def initialise_model(key: str) -> genai.GenerativeModel:
+def initialise_model(key: str, model: str) -> genai.GenerativeModel:
     """Initialises a model"""
     genai.configure(api_key=key)
     return genai.GenerativeModel(
-        "gemini-1.5-flash",
+        model,
         generation_config={
             "candidate_count": 1,
             "response_mime_type": "application/json",
