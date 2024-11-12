@@ -1,0 +1,38 @@
+de:
+  lang: German
+  forms: |
+    one of
+      + the plural if it's a noun, (e.g. 'Erinnerungen')
+      + the past participle and simple past if it's a verb, OR 
+      + the comparative and superlative if it's an adjective (e.g. ['witziger', 'am witizgsten']).
+  examples:
+    -
+      word: abholen
+      category: verb
+      definition: ["to pick up"]
+      forms: ["hat abgeholt", "holte ab"]
+      example: [
+          "Ich hole dich am Bahnhof ab.",
+          "Er hat gesagt, er habe das Paket bei der Post abgeholt, ohne sich auszuweisen."
+      ]
+      reverse: [
+          "I will pick you up at the train station.",
+          "He said he picked the package up from the post office without showing ID."
+      ]
+    -
+      word: die Schlägerei
+      category: noun
+      definition: ["brawl"]
+      forms: ["die Schlägereien"]
+      example: [
+          "Es gab eine Schlägerei zwischen zwei Männern.",
+          "Nach der Schlägerei in der Bar, die durch einen Streit um ein \
+            Fußballspiel ausgelöst wurde, musste die Polizei eingreifen, \
+            um die wütenden Partygänger zu trennen.",
+      ]
+      reverse: [
+          "There was a brawl between two men.",
+          "After the brawl in the bar, which was triggered by a dispute \
+            over a football match, the police had to intervene to separate \
+            the angry partygoers.",
+      ]

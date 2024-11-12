@@ -1,4 +1,4 @@
-# Karten CLI (WIP)
+# Karten CLI
 
 A simple CLI application for creating German vocabulary flashcards from Kindle dictionary lookups using generative AI. It is very geared to my tastes so your milage may vary. Pull requests are of course welcome.
 
