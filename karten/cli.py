@@ -35,7 +35,7 @@ def card(word, key, model):
     model = initialise_model(key, model)
     try:
         card = card_collect(word, model)  # pylint: disable=redefined-outer-name
-        click.echo(json.dumps(card, indent=2))
+        click.echo(json.dumps(card, indent=2, ensure_ascii=False))
     except CardError as e:
         click.echo(e)
 
