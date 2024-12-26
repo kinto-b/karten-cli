@@ -12,11 +12,11 @@ de:
       definition: ["to pick up"]
       forms: ["hat abgeholt", "holte ab"]
       example: [
-          "Ich hole dich am Bahnhof ab.",
-          "Er hat gesagt, er habe das Paket bei der Post abgeholt, ohne sich auszuweisen."
+          "Wenn ich mich nicht um die Kinder hätte kümmern müssen, hätte ich dich vom Bahnhof abholen können.",
+          "Er hat gesagt, er habe das Paket bei der Post abgeholt, ohne sich auszuweisen.",
       ]
       reverse: [
-          "I will pick you up at the train station.",
+          "If I hadn't needed to take care of the children, I could have picked you up from the station",
           "He said he picked the package up from the post office without showing ID."
       ]
     -
@@ -35,4 +35,51 @@ de:
           "After the brawl in the bar, which was triggered by a dispute \
             over a football match, the police had to intervene to separate \
             the angry partygoers.",
+      ]
+es:
+  lang: Spanish
+  forms: |
+    one of
+      + the plural if it's a noun, (e.g. 'perros')
+      + the present tense conjugations if it's a verb, OR 
+      + the comparative and superlative if it's an adjective (e.g. ['más rápido', 'el más rápido']).
+  examples:
+    -
+      word: caminar
+      category: verb
+      definition: ["to walk"]
+      present: ["camino", "caminas", "camina", "caminamos", "camináis", "caminan"]
+      example: [
+          "Ayer caminé por el parque durante una hora.",
+          "Después de la cena, siempre caminan juntos para relajarse.",
+      ]
+      reverse: [
+          "Yesterday I walked through the park for an hour.",
+          "After dinner, they always walk together to relax."
+      ]
+    -
+      word: el perro
+      category: noun
+      definition: ["dog"]
+      forms: ["los perros"]
+      example: [
+          "El perro ladró toda la noche.",
+          "Los perros corren rápidamente hacia el parque cuando ven la pelota.",
+      ]
+      reverse: [
+          "The dog barked all night.",
+          "The dogs run quickly toward the park when they see the ball."
+      ]
+    -
+      word: rápido
+      category: adjective
+      definition: ["fast", "quick"]
+      forms: ["más rápido", "el más rápido"]
+      example: [
+          "Este coche es más rápido que el anterior.",
+          "Es el corredor más rápido del equipo.",
+      ]
+      reverse: [
+          "This car is faster than the previous one.",
+          "He is the fastest runner on the team."
       ]

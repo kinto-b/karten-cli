@@ -63,9 +63,9 @@ def card_prompt(word: str, lang: str) -> str:
     return CardPrompt[lang.upper()].value + f"\n\nWord: {word}"
 
 
-def card_collect(word: str, model: genai.GenerativeModel) -> Card:
+def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
     """Creates a card using Google LLM"""
-    prompt = card_prompt(word, "de")
+    prompt = card_prompt(word, lang)
     response = model.generate_content(prompt)
     try:
         return json.loads(response.text)

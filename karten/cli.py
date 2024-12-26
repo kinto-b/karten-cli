@@ -25,16 +25,17 @@ def cli():  # pylint: disable=missing-docstring
 
 @cli.command()
 @click.argument("word")
+@option_lang
 @option_key
 @option_model
-def card(word, key, model):
+def card(word, lang, key, model):
     """Fetch and display JSON data for WORD"""
     if not key:
         click.echo("Error: API key must be provided.")
         return
     model = initialise_model(key, model)
     try:
-        card = card_collect(word, model)  # pylint: disable=redefined-outer-name
+        card = card_collect(word, lang, model)  # pylint: disable=redefined-outer-name
         click.echo(json.dumps(card, indent=2, ensure_ascii=False))
     except CardError as e:
         click.echo(e)
@@ -42,12 +43,13 @@ def card(word, key, model):
 
 @cli.command()
 @click.argument("words", nargs=-1)
+@option_lang
 @option_file
 @option_key
 @option_model
-def deck(words, file, key, model):
+def deck(words, lang, file, key, model):
     """Creates a csv of cards ready for import into Anki (or equivalent)"""
-    _create_deck(words, file, key, model)
+    _create_deck(words, lang, file, key, model)
 
 
 @cli.command()
@@ -63,15 +65,13 @@ def kindle_deck(kindle_dir, file, lang, date_from, key, model):
     the vocabulary lookups in language LANG from the kindle at KINDLE_DIR.
     Note that currently only LANG='de' is supported.
     """
-
-    if lang != "de":
-        click.echo(f"Error: LANG='{lang}' not supported")
-
     words = kindle_read(kindle_dir, lang, date_from)
-    _create_deck(words, file, key, model)
+    _create_deck(words, lang, file, key, model)
 
 
-def _create_deck(words: Iterable[str], file: str, key: str, model: str) -> None:
+def _create_deck(
+    words: Iterable[str], lang: str, file: str, key: str, model: str
+) -> None:
     """Adds cards for new words to the deck at OUTPUT"""
     append = os.path.exists(file)
 
@@ -80,8 +80,7 @@ def _create_deck(words: Iterable[str], file: str, key: str, model: str) -> None:
     with click.progressbar(words) as progress:
         for word in progress:
             try:
-                card = card_collect(word, model)  # pylint: disable=redefined-outer-name
-                deck.append(card_format(card))
+                deck.append(card_format(card_collect(word, lang, model)))
             except CardError:
                 err.append(word)
 
