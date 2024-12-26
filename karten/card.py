@@ -7,7 +7,7 @@ import json
 import google.generativeai as genai
 import typing_extensions as typing
 
-from .prompt import CONTEXT_PROMPT
+from .prompt import CardPrompt
 
 CARD_FIELDS = (
     "word",
@@ -58,14 +58,14 @@ def initialise_model(key: str, model: str) -> genai.GenerativeModel:
     )
 
 
-def card_prompt(word: str) -> str:
+def card_prompt(word: str, lang: str) -> str:
     """Prepares the prompt"""
-    return CONTEXT_PROMPT + f"\n\nWord: {word}"
+    return CardPrompt[lang.upper()].value + f"\n\nWord: {word}"
 
 
-def card_collect(word: str, model: genai.GenerativeModel) -> Card:
+def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
     """Creates a card using Google LLM"""
-    prompt = card_prompt(word)
+    prompt = card_prompt(word, lang)
     response = model.generate_content(prompt)
     try:
         return json.loads(response.text)

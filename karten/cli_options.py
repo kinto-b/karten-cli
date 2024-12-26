@@ -49,6 +49,7 @@ def option_lang(func):
     """Word language"""
     return click.option(
         "--lang",
+        type=click.Choice(["de", "es"], case_sensitive=False),
         default="de",
-        help="The ISO 639 code of the target language. Currently only 'de' supported.",
+        help="The ISO 639 code of the target language. Currently only 'de' and 'es' supported.",
     )(func)

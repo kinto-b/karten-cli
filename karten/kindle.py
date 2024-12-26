@@ -22,7 +22,7 @@ def kindle_read(kindle_dir: str, lang: str, date_from: datetime) -> list[str]:
         FROM words \
         WHERE lang=? AND timestamp>?\
         ORDER BY timestamp DESC;",
-        (lang, timestamp),
+        (lang.lower(), timestamp),
     )
 
     words = []

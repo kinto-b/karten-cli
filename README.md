@@ -1,13 +1,13 @@
-# Karten CLI (WIP)
+# Karten CLI
 
-A simple CLI application for creating German vocabulary flashcards from Kindle dictionary lookups using generative AI. It is very geared to my tastes so your milage may vary. Pull requests are of course welcome.
+A simple CLI application for creating vocabulary flashcards using generative AI, with functionality for bulk flashcard creation from Kindle dictionary lookups. It is very geared to my tastes so your milage may vary.
 
 ## Getting started
 
 To install, simply clone this repo and then
 
 ```bash
-$ pip install -e .
+$ pip install https://github.com/kinto-b/karten-cli.git
 ```
 
 You'll need a key for Google's Generative Language service. Once you've got one, export it 

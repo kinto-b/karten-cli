@@ -13,7 +13,7 @@ from karten.card import Card, CardError, card_format
 from karten.deck import deck_read, deck_write
 
 
-def mock_card_collect(word, model):  # pylint: disable=unused-argument
+def mock_card_collect(word, lang, model):  # pylint: disable=unused-argument
     """Overwrite the function which serves cards using the LLM"""
     if word == "fail":
         raise CardError("Fail!")
@@ -50,7 +50,7 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_card.assert_called()
 
-        expected = [card_format(mock_card_collect(e, None)) for e in expected]
+        expected = [card_format(mock_card_collect(e, None, None)) for e in expected]
         output = deck_read(file)
         for e, o in zip(expected, output):
             self.assertDictEqual(e, o)
@@ -103,7 +103,7 @@ class TestCLI(unittest.TestCase):
         with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
-            deck_write([card_format(mock_card_collect("first", None))], file)
+            deck_write([card_format(mock_card_collect("first", None, None))], file)
 
         words = ["some", "words"]
         expected = ["first", "some", "words"]

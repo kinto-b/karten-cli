@@ -2,49 +2,40 @@
 Prompt templates
 """
 
-CONTEXT_PROMPT = """Hi I'm learning German. I need your help making flashcards.
+import os
+from enum import Enum
+import json
+import yaml
+
+DIR = os.path.dirname(os.path.realpath(__file__))
+CONFIG_FP = my_file = os.path.join(DIR, "prompt.yaml")
+
+with open(CONFIG_FP, "r", encoding="utf8") as f:
+    CONFIG = yaml.safe_load(f)
+
+
+def _prompt(lang, forms, examples):
+    return f"""Hi I'm learning {lang}. I need your help making flashcards.
 
 I will give you a word and I want you to give me a card formatted as JSON with the following fields
 
-- word: the word in German, with the article if it's a noun
+- word: the word in {lang}, with the article if it's a noun
 - category: noun, verb, adjective, etc.
 - definition: the meaning in English.
-- forms: one of:
-  + the plural if it's a noun, (e.g. 'Erinnerungen')
-  + the past participle and simple past if it's a verb, OR 
-  + the comparative and superlative if it's an adjective (e.g. ['witziger', 'am witizgsten']).
-- example: a few complex sentences using the word in German. These should should the usage with the different prepositions, cases, and tenses. Include at least one complex example.
+- forms: {forms}
+- example: a few sentences using the word in {lang}. 
+  These should should the usage with the different prepositions, cases, and tenses. 
+  Include at least one complex example.
 - reverse: the example sentences translated into English.
 
-Here's two examples
+Here are some examples:
 
-{
-  "word": "abholen",
-  "category": "verb",
-  "definition": ["to pick up"],
-  "forms": ["hat abgeholt", "holte ab"],
-  "example": [
-    "Ich hole dich am Bahnhof ab.",
-    "Er hat gesagt, er habe das Paket bei der Post abgeholt, ohne sich auszuweisen."
-  ],
-  "reverse": [
-    "I will pick you up at the train station.",
-    "He said he picked the package up from the post office without showing ID."
-  ],
-}
-
-{
-  "word": "die Schlägerei",
-  "category": "noun",
-  "definition": ["brawl"],
-  "forms": ["die Schlägereien"],
-  "example": [
-    "Es gab eine Schlägerei zwischen zwei Männern.",
-    "Nach der Schlägerei in der Bar, die durch einen Streit um ein Fußballspiel ausgelöst wurde, musste die Polizei eingreifen, um die wütenden Partygänger zu trennen."
-  ],
-  "reverse": [
-    "There was a brawl between two men."
-    "After the brawl in the bar, which was triggered by a dispute over a football match, the police had to intervene to separate the angry partygoers."
-  ],
-}
+{"\n".join(json.dumps(e, ensure_ascii=False) for e in examples)}
 """
+
+
+class CardPrompt(Enum):
+    """Prompt templates for generating cards in a variety of languages"""
+
+    DE = _prompt(CONFIG["de"]["lang"], CONFIG["de"]["forms"], CONFIG["de"]["examples"])
+    ES = _prompt(CONFIG["es"]["lang"], CONFIG["es"]["forms"], CONFIG["es"]["examples"])
