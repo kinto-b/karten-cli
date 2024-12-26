@@ -2,9 +2,11 @@
 
 A simple CLI application for creating vocabulary flashcards using generative AI, with functionality for bulk flashcard creation from Kindle dictionary lookups. It is very geared to my tastes so your milage may vary.
 
+Note: so far only German (de) and Spanish (es) are implemented.
+
 ## Getting started
 
-To install, simply clone this repo and then
+To install, simply run
 
 ```bash
 $ pip install https://github.com/kinto-b/karten-cli.git
@@ -84,7 +86,7 @@ $ karten kindle-deck D:/ --file=./cards.csv --date-from=2024-08-01
 
 This will extract the dictionary lookups from your kindle and export flashcards to `./cards.csv`
 
-You might prefer to inspect the words before you create cards for them. There will undoubtedly be a bit of dreck in there, so you might be able to save some cloud credits by editing the word list before using it to create cards. You can export just the raw kindle lookups using
+You might prefer to inspect the words before you create cards for them. (I do it this way). There will undoubtedly be a bit of dreck in there, so you might be able to save some cloud credits by editing the word list before using it to create cards. You can export just the raw kindle lookups using
 
 ```bash
 $ karten kindle-words D:/ > words.txt
