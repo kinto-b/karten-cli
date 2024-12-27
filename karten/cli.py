@@ -6,6 +6,7 @@ from typing import Iterable
 
 import click
 
+from . import __version__
 from .card import initialise_model, card_collect, card_format, CardError
 from .deck import deck_write
 from .kindle import kindle_read
@@ -19,6 +20,7 @@ from .cli_options import (
 
 
 @click.group()
+@click.version_option(__version__, prog_name="karten")
 def cli():  # pylint: disable=missing-docstring
     pass
 
