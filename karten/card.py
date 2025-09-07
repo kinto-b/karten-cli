@@ -68,15 +68,31 @@ def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
     prompt = card_prompt(word, lang)
     response = model.generate_content(prompt)
     try:
-        return json.loads(response.text)
+        card = json.loads(response.text)
     except ValueError as e:
-        raise CardError(f"Card could not be created for {word}") from e
+        raise CardError(f"LLM returned a non-conforming response for '{word}'") from e
+
+    if not isinstance(card, dict):
+        raise CardError(
+            f"LLM returned a non-conforming response for '{word}' (not a dict)"
+        )
+
+    for field in CARD_FIELDS:
+        if field not in card:
+            raise CardError(
+                f"LLM returned a non-conforming response for '{word}' (missing field '{field}')"
+            )
+
+    return typing.cast(Card, card)
 
 
 def card_format(card: Card) -> CardFormatted:
     """Format a card so that it can be written as CSV"""
-    card["definition"] = "; ".join(card["definition"])
-    card["forms"] = " | ".join(card["forms"])
-    card["example"] = "<br/><br/>".join(card["example"])
-    card["reverse"] = "<br/><br/>".join(card["reverse"])
-    return card
+    return CardFormatted(
+        word=card["word"],
+        category=card["category"],
+        definition="; ".join(card["definition"]),
+        forms=" | ".join(card["forms"]),
+        example="<br/><br/>".join(card["example"]),
+        reverse="<br/><br/>".join(card["reverse"]),
+    )

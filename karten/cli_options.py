@@ -4,19 +4,12 @@ import os
 
 import click
 
-_ALLOWABLE_MODELS = (
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
-    "gemini-2.0-flash",
-)
-
 
 def option_model(func):
     """Model option"""
     return click.option(
         "--model",
         default="gemini-1.5-pro",
-        type=click.Choice(_ALLOWABLE_MODELS),
         help="The model to use",
     )(func)
 
