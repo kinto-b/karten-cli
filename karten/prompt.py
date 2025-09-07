@@ -9,7 +9,7 @@ from enum import Enum
 import yaml
 
 DIR = os.path.dirname(os.path.realpath(__file__))
-CONFIG_FP = my_file = os.path.join(DIR, "prompt.yaml")
+CONFIG_FP = os.path.join(DIR, "prompt.yaml")
 
 with open(CONFIG_FP, "r", encoding="utf8") as f:
     CONFIG = yaml.safe_load(f)

@@ -7,16 +7,16 @@ from typing import Iterable
 import click
 
 from . import __version__
-from .card import initialise_model, card_collect, card_format, CardError
-from .deck import deck_write
-from .kindle import kindle_read
+from .card import CardError, card_collect, card_format, initialise_model
 from .cli_options import (
-    option_model,
     option_date_from,
     option_file,
     option_key,
     option_lang,
+    option_model,
 )
+from .deck import deck_write
+from .kindle import kindle_read
 
 
 @click.group()
@@ -33,8 +33,7 @@ def cli():  # pylint: disable=missing-docstring
 def card(word, lang, key, model):
     """Fetch and display JSON data for WORD"""
     if not key:
-        click.echo("Error: API key must be provided.")
-        return
+        raise click.BadParameter("API key must be provided.")
     model = initialise_model(key, model)
     try:
         card = card_collect(word, lang, model)  # pylint: disable=redefined-outer-name
@@ -104,10 +103,6 @@ def kindle_words(kindle_dir, lang, date_from):
     """
     Extract the words from your Kindle dictionary lookups.
     """
-
-    if lang != "de":
-        click.echo(f"Error: LANG='{lang}' not supported")
-
     words = kindle_read(kindle_dir, lang, date_from)
     for word in words:
         click.echo(word)

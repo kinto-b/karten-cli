@@ -70,17 +70,20 @@ def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
     try:
         card = json.loads(response.text)
     except ValueError as e:
-        raise CardError(f"LLM returned a non-conforming response for '{word}'") from e
+        # Log the actual response for debugging
+        raise CardError(
+            f"LLM returned a non-conforming response for '{word}': {response.text}"
+        ) from e
 
     if not isinstance(card, dict):
         raise CardError(
-            f"LLM returned a non-conforming response for '{word}' (not a dict)"
+            f"LLM returned a non-conforming response for '{word}' (not a dict): {response.text}"
         )
 
     for field in CARD_FIELDS:
         if field not in card:
             raise CardError(
-                f"LLM returned a non-conforming response for '{word}' (missing field '{field}')"
+                f"LLM returned a non-conforming response for '{word}' (missing field '{field}'): {response.text}"
             )
 
     return typing.cast(Card, card)
