@@ -2,9 +2,10 @@
 Prompt templates
 """
 
+import json
 import os
 from enum import Enum
-import json
+
 import yaml
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -15,6 +16,7 @@ with open(CONFIG_FP, "r", encoding="utf8") as f:
 
 
 def _prompt(lang, forms, examples):
+    examples_str = "\n".join(json.dumps(e, ensure_ascii=False) for e in examples)
     return f"""Hi I'm learning {lang}. I need your help making flashcards.
 
 I will give you a word and I want you to give me a card formatted as JSON with the following fields
@@ -30,7 +32,7 @@ I will give you a word and I want you to give me a card formatted as JSON with t
 
 Here are some examples:
 
-{"\n".join(json.dumps(e, ensure_ascii=False) for e in examples)}
+{examples_str}
 """
 
 
