@@ -9,7 +9,7 @@ def option_model(func):
     """Model option"""
     return click.option(
         "--model",
-        default="gemini-1.5-pro",
+        default="gemini-2.5-flash",
         help="The model to use",
     )(func)
 

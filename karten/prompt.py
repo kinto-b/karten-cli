@@ -25,9 +25,9 @@ I will give you a word and I want you to give me a card formatted as JSON with t
 - category: noun, verb, adjective, etc.
 - definition: the meaning in English.
 - forms: {forms}
-- example: a few sentences using the word in {lang}. 
-  These should should the usage with the different prepositions, cases, and tenses. 
-  Include at least one complex example.
+- example: a few sentences using the word in colloquial {lang}.
+  These should should the usage with the different prepositions, cases, tenses and moods. 
+  Include at least one complex example, but focus on causal speech.
 - reverse: the example sentences translated into English.
 
 Here are some examples:
