@@ -91,11 +91,16 @@ def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
 
 def card_format(card: Card) -> CardFormatted:
     """Format a card so that it can be written as CSV"""
-    return CardFormatted(
-        word=card["word"],
-        category=card["category"],
-        definition="; ".join(card["definition"]),
-        forms=" | ".join(card["forms"]),
-        example="<br/><br/>".join(card["example"]),
-        reverse="<br/><br/>".join(card["reverse"]),
-    )
+    try:
+        return CardFormatted(
+            word=card["word"],
+            category=card["category"],
+            definition="; ".join(card["definition"]),
+            forms=" | ".join(card["forms"]),
+            example="<br/><br/>".join(card["example"]),
+            reverse="<br/><br/>".join(card["reverse"]),
+        )
+    except Exception as e:
+        raise CardError(
+            f"Failed to format card for '{card.get('word', 'unknown')}': {e}"
+        ) from e
