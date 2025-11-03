@@ -67,24 +67,35 @@ def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
     """Creates a card using Google LLM"""
     prompt = card_prompt(word, lang)
     response = model.generate_content(prompt)
+    return _card_parse(response.text)
+
+
+def _card_parse(raw_card: str) -> Card:
+    """Parse raw card JSON string into Card dict"""
     try:
-        card = json.loads(response.text)
+        card = json.loads(raw_card)
     except ValueError as e:
-        # Log the actual response for debugging
-        raise CardError(
-            f"LLM returned a non-conforming response for '{word}': {response.text}"
-        ) from e
+        raise CardError(f"Failed to parse card JSON: {raw_card}") from e
 
     if not isinstance(card, dict):
-        raise CardError(
-            f"LLM returned a non-conforming response for '{word}' (not a dict): {response.text}"
-        )
+        raise CardError(f"Card JSON is not a dictionary: {raw_card}")
 
     for field in CARD_FIELDS:
         if field not in card:
-            raise CardError(
-                f"LLM returned a non-conforming response for '{word}' (missing field '{field}'): {response.text}"
-            )
+            raise CardError(f"Card JSON missing field '{field}': {raw_card}")
+
+        if card[field] is None:
+            card[field] = ""
+
+        # Ensure list fields are lists
+        field_type = Card.__annotations__.get(field)
+        if field_type == list[str]:
+            if isinstance(card[field], str):
+                card[field] = [card[field]]
+            elif not isinstance(card[field], list):
+                raise CardError(
+                    f"Card field '{field}' has unexpected format: {raw_card}"
+                )
 
     return typing.cast(Card, card)
 
