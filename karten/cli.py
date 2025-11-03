@@ -77,16 +77,14 @@ def _create_deck(
     append = os.path.exists(file)
 
     model = initialise_model(key, model)
-    deck, err = [], []  # pylint: disable=redefined-outer-name
+    deck = []  # pylint: disable=redefined-outer-name
     with click.progressbar(words) as progress:
         for word in progress:
             try:
                 deck.append(card_format(card_collect(word, lang, model)))
-            except CardError:
-                err.append(word)
+            except CardError as e:
+                click.echo(f"Error processing '{word}': {e}")
 
-    if err:
-        click.echo(f"Failed to create cards for: {', '.join(err)}")
     if not deck:
         return
 

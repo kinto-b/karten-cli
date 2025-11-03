@@ -1,15 +1,15 @@
 """Test CLI commands"""
 
-from tempfile import NamedTemporaryFile
 import os
-
-import unittest
 import sqlite3
+import unittest
+from tempfile import NamedTemporaryFile
 from unittest.mock import patch
+
 from click.testing import CliRunner
 
-from karten.cli import cli
 from karten.card import Card, CardError, card_format
+from karten.cli import cli
 from karten.deck import deck_read, deck_write
 
 
@@ -80,7 +80,7 @@ class TestCLI(unittest.TestCase):
         expected = ["some", "words"]
         try:
             res = self.helper_deck(fp, words, expected, mock_card)
-            self.assertIn("Failed to create cards for: fail", res.output)
+            self.assertIn("Error processing 'fail'", res.output)
         finally:
             os.remove(fp)
 
@@ -93,7 +93,7 @@ class TestCLI(unittest.TestCase):
         words = ["fail", "fail"]
         try:
             res = self.helper_deck(fp, words, [], mock_card)
-            self.assertIn("Failed to create cards for: fail, fail", res.output)
+            self.assertIn("Error processing 'fail'", res.output)
         finally:
             os.remove(fp)
 
