@@ -57,3 +57,15 @@ class Card(BaseModel):
             "example": "<br/><br/>".join(self.example),
             "reverse": "<br/><br/>".join(self.reverse),
         }
+
+    @classmethod
+    def from_csv_row(cls, row: dict[str, str]) -> "Card":
+        """Create Card from CSV row dict"""
+        return cls(
+            word=row["word"],
+            category=row["category"],
+            definition=row["definition"].split("; ") if row["definition"] else [],
+            forms=row["forms"].split(" | ") if row["forms"] else [],
+            example=row["example"].split("<br/><br/>") if row["example"] else [],
+            reverse=row["reverse"].split("<br/><br/>") if row["reverse"] else [],
+        )

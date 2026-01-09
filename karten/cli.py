@@ -15,7 +15,7 @@ from .cli_options import (
     option_lang,
     option_model,
 )
-from .deck import deck_write
+from .deck import Deck
 from .kindle import kindle_read
 
 
@@ -32,11 +32,9 @@ def cli():  # pylint: disable=missing-docstring
 @option_model
 def card(word, lang, key, model):
     """Fetch and display JSON data for WORD"""
-    if not key:
-        raise click.BadParameter("API key must be provided.")
-    model = CardGenerator(api_key=key, model_name=model)
     try:
-        card = model.collect(word, lang)  # pylint: disable=redefined-outer-name
+        generator = CardGenerator(api_key=key, model_name=model)
+        card = generator.collect(word, lang)  # pylint: disable=redefined-outer-name
         click.echo(card.model_dump_json(indent=2, exclude_none=True))
     except CardError as e:
         click.echo(e)
@@ -76,21 +74,24 @@ def _create_deck(
     """Adds cards for new words to the deck at OUTPUT"""
     append = os.path.exists(file)
 
-    model = CardGenerator(api_key=key, model_name=model_name)
-    deck = []  # pylint: disable=redefined-outer-name
-    with click.progressbar(words) as progress:
+    try:
+        generator = CardGenerator(api_key=key, model_name=model_name)
+    except CardError as e:
+        click.echo(f"Error: {e}")
+        return
+
+    deck = Deck()
+    words_list = list(words)
+    with click.progressbar(words_list) as progress:
         for word in progress:
             try:
-                deck.append(model.collect(word, lang).to_csv_row())
+                card = generator.collect(word, lang)
+                deck.add(card)
             except CardError as e:
                 click.echo(f"Error processing '{word}': {e}")
 
-    if not deck:
-        return
-
-    mode = "a" if append else "w"
-    with click.open_file(file, mode, encoding="utf8") as stream:
-        deck_write(deck, stream)
+    # Write the deck
+    deck.write(file, append=append)
 
 
 @cli.command()

@@ -13,6 +13,8 @@ class CardGenerator:
     """Generates flashcards using Google GenAI"""
 
     def __init__(self, api_key: str, model_name: str):
+        if not api_key:
+            raise CardError("API key must be provided")
         self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
         self.config = types.GenerateContentConfig(

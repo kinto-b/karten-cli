@@ -10,7 +10,7 @@ from click.testing import CliRunner
 
 from karten.card import Card, CardError
 from karten.cli import cli
-from karten.deck import deck_read, deck_write
+from karten.deck import Deck
 
 
 def mock_card_collect(self, word, lang=None):  # pylint: disable=unused-argument
@@ -54,10 +54,10 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_card.assert_called()
 
-        expected = [mock_card_collect(e, None).to_csv_row() for e in expected]
-        output = deck_read(file)
-        for e, o in zip(expected, output):
-            self.assertDictEqual(e, o)
+        expected = [mock_card_collect(e, None) for e in expected]
+        output = Deck.read(file)
+        for e, o in zip(expected, output.cards):
+            self.assertEqual(e, o)
 
         return result
 
@@ -107,7 +107,8 @@ class TestCLI(unittest.TestCase):
         with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
-            deck_write([mock_card_collect("first", None).to_csv_row()], file)
+            deck = Deck([mock_card_collect("first", None)])
+            deck.write(fp)
 
         words = ["some", "words"]
         expected = ["first", "some", "words"]
