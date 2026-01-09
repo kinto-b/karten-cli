@@ -21,7 +21,7 @@ from .kindle import kindle_read
 
 @click.group()
 @click.version_option(__version__, prog_name="karten")
-def cli():  # pylint: disable=missing-docstring
+def cli():
     pass
 
 
@@ -34,8 +34,8 @@ def card(word, lang, key, model):
     """Fetch and display JSON data for WORD"""
     try:
         generator = CardGenerator(api_key=key, model_name=model)
-        card = generator.collect(word, lang)  # pylint: disable=redefined-outer-name
-        click.echo(card.model_dump_json(indent=2, exclude_none=True))
+        generated_card = generator.collect(word, lang)
+        click.echo(generated_card.model_dump_json(indent=2, exclude_none=True))
     except (CardError, CardGeneratorError) as e:
         click.echo(f"Error: {e}")
 
@@ -90,7 +90,6 @@ def _create_deck(
             except (CardError, CardGeneratorError) as e:
                 click.echo(f"Error processing '{word}': {e}")
 
-    # Write the deck
     deck.write(file, append=append)
 
 

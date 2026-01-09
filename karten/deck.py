@@ -33,9 +33,9 @@ class Deck:
     def _write_to_stream(self, stream: IO[str]) -> None:
         """Write deck to a stream"""
         fieldnames = list(Card.model_fields.keys())
-        writer = csv.DictWriter(stream, fieldnames, lineterminator="\n")  # type: ignore[arg-type]
+        writer = csv.DictWriter(stream, fieldnames, lineterminator="\n")
         for card in self.cards:
-            writer.writerow(card.to_csv_row())  # type: ignore[arg-type]
+            writer.writerow(card.to_csv_row())
 
     @classmethod
     def read(cls, file: str) -> "Deck":
@@ -45,7 +45,7 @@ class Deck:
         with open(file, "r", encoding="utf8") as f:
             reader = csv.DictReader(f, fieldnames)
             for row in reader:
-                deck.cards.append(Card.from_csv_row(row))  # type: ignore[arg-type]
+                deck.cards.append(Card.from_csv_row(row))
         return deck
 
     def __len__(self) -> int:
