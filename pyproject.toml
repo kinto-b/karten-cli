@@ -1,6 +1,6 @@
 [project]
 name = "karten-cli"
-version = "0.0.2"
+version = "0.0.3"
 description = "A simple CLI application for creating vocabulary flashcards using generative AI, with functionality for bulk flashcard creation from Kindle dictionary lookups"
 readme = "README.md"
 requires-python = ">=3.9"
