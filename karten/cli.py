@@ -7,7 +7,7 @@ from typing import Iterable
 import click
 
 from . import __version__
-from .card import CardError, card_collect, card_format, initialise_model
+from .card import CardError, CardModel, card_format
 from .cli_options import (
     option_date_from,
     option_file,
@@ -34,9 +34,9 @@ def card(word, lang, key, model):
     """Fetch and display JSON data for WORD"""
     if not key:
         raise click.BadParameter("API key must be provided.")
-    model = initialise_model(key, model)
+    model = CardModel(api_key=key, model_name=model)
     try:
-        card = card_collect(word, lang, model)  # pylint: disable=redefined-outer-name
+        card = model.collect(word, lang)  # pylint: disable=redefined-outer-name
         click.echo(json.dumps(card, indent=2, ensure_ascii=False))
     except CardError as e:
         click.echo(e)
@@ -71,17 +71,17 @@ def kindle_deck(kindle_dir, file, lang, date_from, key, model):
 
 
 def _create_deck(
-    words: Iterable[str], lang: str, file: str, key: str, model: str
+    words: Iterable[str], lang: str, file: str, key: str, model_name: str
 ) -> None:
     """Adds cards for new words to the deck at OUTPUT"""
     append = os.path.exists(file)
 
-    model = initialise_model(key, model)
+    model = CardModel(api_key=key, model_name=model_name)
     deck = []  # pylint: disable=redefined-outer-name
     with click.progressbar(words) as progress:
         for word in progress:
             try:
-                deck.append(card_format(card_collect(word, lang, model)))
+                deck.append(card_format(model.collect(word, lang)))
             except CardError as e:
                 click.echo(f"Error processing '{word}': {e}")
 

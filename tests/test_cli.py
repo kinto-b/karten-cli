@@ -13,8 +13,12 @@ from karten.cli import cli
 from karten.deck import deck_read, deck_write
 
 
-def mock_card_collect(word, lang, model):  # pylint: disable=unused-argument
-    """Overwrite the function which serves cards using the LLM"""
+def mock_card_collect(self, word, lang=None):  # pylint: disable=unused-argument
+    """Overwrite the method which serves cards using the LLM"""
+    # When called directly from test (not as method), self is actually word
+    if lang is None:
+        word = self
+
     if word == "fail":
         raise CardError("Fail!")
 
@@ -44,20 +48,20 @@ class TestCLI(unittest.TestCase):
         """Check that output written to file is as expected"""
         result = self.runner.invoke(
             cli,
-            ["deck"] + words + ["--file", file],
+            ["deck"] + words + ["--file", file, "--key", "fake_api_key"],
         )
 
         self.assertEqual(result.exit_code, 0)
         mock_card.assert_called()
 
-        expected = [card_format(mock_card_collect(e, None, None)) for e in expected]
+        expected = [card_format(mock_card_collect(e, None)) for e in expected]
         output = deck_read(file)
         for e, o in zip(expected, output):
             self.assertDictEqual(e, o)
 
         return result
 
-    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
+    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
     def test_deck_file_fresh(self, mock_card):
         """Test deck command with a fresh file"""
         with NamedTemporaryFile("w+", delete=False) as file:
@@ -70,7 +74,7 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
+    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
     def test_deck_some_fail(self, mock_card):
         """Test deck command with a fresh file"""
         with NamedTemporaryFile("w+", delete=False) as file:
@@ -84,7 +88,7 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
+    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
     def test_deck_all_fail(self, mock_card):
         """Test deck command with a fresh file"""
         with NamedTemporaryFile("w+", delete=False) as file:
@@ -97,13 +101,13 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.cli.card_collect", side_effect=mock_card_collect)
+    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
     def test_deck_file_append(self, mock_card):
         """Test deck command with a pre-existing file"""
         with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
-            deck_write([card_format(mock_card_collect("first", None, None))], file)
+            deck_write([card_format(mock_card_collect("first", None))], file)
 
         words = ["some", "words"]
         expected = ["first", "some", "words"]

@@ -4,8 +4,9 @@ Collect card data from an LLM
 
 import json
 
-import google.generativeai as genai
 import typing_extensions as typing
+from google import genai
+from google.genai import types
 
 from .prompt import CardPrompt
 
@@ -45,29 +46,37 @@ class CardError(Exception):
     """Card could not be created"""
 
 
-def initialise_model(key: str, model: str) -> genai.GenerativeModel:
-    """Initialises a model"""
-    genai.configure(api_key=key)
-    return genai.GenerativeModel(
-        model,
-        generation_config={
-            "candidate_count": 1,
-            "response_mime_type": "application/json",
-            # "response_schema": Card,
-        },
-    )
+class CardModel:
+    """Wrapper for Google GenAI client configured for card generation"""
 
+    def __init__(self, api_key: str, model_name: str):
+        self.client = genai.Client(api_key=api_key)
+        self.model_name = model_name
+        self.config = types.GenerateContentConfig(
+            response_mime_type="application/json",
+            response_schema=Card,
+        )
 
-def card_prompt(word: str, lang: str) -> str:
-    """Prepares the prompt"""
-    return CardPrompt[lang.upper()].value + f"\n\nWord: {word}"
+    def _prepare_prompt(self, word: str, lang: str) -> str:
+        """Prepares the prompt for a given word and language"""
+        return CardPrompt[lang.upper()].value + f"\n\nWord: {word}"
 
+    def generate_content(self, prompt: str) -> str:
+        """Generate content using the configured model"""
+        response = self.client.models.generate_content(
+            model=self.model_name,
+            contents=prompt,
+            config=self.config,
+        )
+        if response.text is None:
+            raise CardError("No response text from model")
+        return response.text
 
-def card_collect(word: str, lang: str, model: genai.GenerativeModel) -> Card:
-    """Creates a card using Google LLM"""
-    prompt = card_prompt(word, lang)
-    response = model.generate_content(prompt)
-    return _card_parse(response.text)
+    def collect(self, word: str, lang: str) -> Card:
+        """Creates a card for the given word using the LLM"""
+        prompt = self._prepare_prompt(word, lang)
+        response_text = self.generate_content(prompt)
+        return _card_parse(response_text)
 
 
 def _card_parse(raw_card: str) -> Card:
