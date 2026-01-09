@@ -7,7 +7,7 @@ import click
 
 from . import __version__
 from .card import CardError
-from .card_generator import CardGenerator
+from .card_generator import CardGenerator, CardGeneratorError
 from .cli_options import (
     option_date_from,
     option_file,
@@ -36,8 +36,8 @@ def card(word, lang, key, model):
         generator = CardGenerator(api_key=key, model_name=model)
         card = generator.collect(word, lang)  # pylint: disable=redefined-outer-name
         click.echo(card.model_dump_json(indent=2, exclude_none=True))
-    except CardError as e:
-        click.echo(e)
+    except (CardError, CardGeneratorError) as e:
+        click.echo(f"Error: {e}")
 
 
 @cli.command()
@@ -76,7 +76,7 @@ def _create_deck(
 
     try:
         generator = CardGenerator(api_key=key, model_name=model_name)
-    except CardError as e:
+    except CardGeneratorError as e:
         click.echo(f"Error: {e}")
         return
 
@@ -87,7 +87,7 @@ def _create_deck(
             try:
                 card = generator.collect(word, lang)
                 deck.add(card)
-            except CardError as e:
+            except (CardError, CardGeneratorError) as e:
                 click.echo(f"Error processing '{word}': {e}")
 
     # Write the deck

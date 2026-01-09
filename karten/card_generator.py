@@ -5,8 +5,12 @@ Card generator using Google GenAI
 from google import genai
 from google.genai import types
 
-from .card import Card, CardError
+from .card import Card
 from .prompt import CardPrompt
+
+
+class CardGeneratorError(Exception):
+    """Card generation failed"""
 
 
 class CardGenerator:
@@ -14,7 +18,7 @@ class CardGenerator:
 
     def __init__(self, api_key: str, model_name: str):
         if not api_key:
-            raise CardError("API key must be provided")
+            raise CardGeneratorError("API key must be provided")
         self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
         self.config = types.GenerateContentConfig(
@@ -34,7 +38,7 @@ class CardGenerator:
             config=self.config,
         )
         if response.text is None:
-            raise CardError("No response text from model")
+            raise CardGeneratorError("No response text from model")
         return response.text
 
     def collect(self, word: str, lang: str) -> Card:

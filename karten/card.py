@@ -6,7 +6,7 @@ from pydantic import BaseModel, field_validator
 
 
 class CardError(Exception):
-    """Card could not be created"""
+    """Card parsing failed"""
 
 
 class Card(BaseModel):
