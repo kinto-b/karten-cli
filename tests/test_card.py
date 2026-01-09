@@ -2,7 +2,7 @@
 
 import unittest
 
-from karten.card import _card_parse, card_format
+from karten.card import Card
 
 DUMMY_RESPONSE = """
 {
@@ -29,14 +29,14 @@ class TestCLI(unittest.TestCase):
 
     def test_null_fields(self):
         """Test that null fields are handled correctly"""
-        card_data = _card_parse(DUMMY_RESPONSE)
-        formatted = card_format(card_data)
+        card_data = Card.from_json(DUMMY_RESPONSE)
+        formatted = card_data.to_csv_row()
         self.assertEqual(formatted["forms"], "")
 
     def test_singleton_fields(self):
         """Test that singleton list fields are handled correctly"""
-        card_data = _card_parse(DUMMY_RESPONSE)
-        formatted = card_format(card_data)
+        card_data = Card.from_json(DUMMY_RESPONSE)
+        formatted = card_data.to_csv_row()
         self.assertEqual(formatted["definition"], "at once")
 
 

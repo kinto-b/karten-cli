@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from click.testing import CliRunner
 
-from karten.card import Card, CardError, card_format
+from karten.card import Card, CardError
 from karten.cli import cli
 from karten.deck import deck_read, deck_write
 
@@ -54,14 +54,14 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_card.assert_called()
 
-        expected = [card_format(mock_card_collect(e, None)) for e in expected]
+        expected = [mock_card_collect(e, None).to_csv_row() for e in expected]
         output = deck_read(file)
         for e, o in zip(expected, output):
             self.assertDictEqual(e, o)
 
         return result
 
-    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
+    @patch("karten.card_generator.CardGenerator.collect", side_effect=mock_card_collect)
     def test_deck_file_fresh(self, mock_card):
         """Test deck command with a fresh file"""
         with NamedTemporaryFile("w+", delete=False) as file:
@@ -74,7 +74,7 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
+    @patch("karten.card_generator.CardGenerator.collect", side_effect=mock_card_collect)
     def test_deck_some_fail(self, mock_card):
         """Test deck command with a fresh file"""
         with NamedTemporaryFile("w+", delete=False) as file:
@@ -88,7 +88,7 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
+    @patch("karten.card_generator.CardGenerator.collect", side_effect=mock_card_collect)
     def test_deck_all_fail(self, mock_card):
         """Test deck command with a fresh file"""
         with NamedTemporaryFile("w+", delete=False) as file:
@@ -101,13 +101,13 @@ class TestCLI(unittest.TestCase):
         finally:
             os.remove(fp)
 
-    @patch("karten.card.CardModel.collect", side_effect=mock_card_collect)
+    @patch("karten.card_generator.CardGenerator.collect", side_effect=mock_card_collect)
     def test_deck_file_append(self, mock_card):
         """Test deck command with a pre-existing file"""
         with NamedTemporaryFile("w+", delete=False) as file:
             fp = file.name
             # Add some content to the file
-            deck_write([card_format(mock_card_collect("first", None))], file)
+            deck_write([mock_card_collect("first", None).to_csv_row()], file)
 
         words = ["some", "words"]
         expected = ["first", "some", "words"]

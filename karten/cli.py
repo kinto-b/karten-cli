@@ -1,13 +1,13 @@
 """CLI functions"""
 
-import json
 import os
 from typing import Iterable
 
 import click
 
 from . import __version__
-from .card import CardError, CardModel, card_format
+from .card import CardError
+from .card_generator import CardGenerator
 from .cli_options import (
     option_date_from,
     option_file,
@@ -34,10 +34,10 @@ def card(word, lang, key, model):
     """Fetch and display JSON data for WORD"""
     if not key:
         raise click.BadParameter("API key must be provided.")
-    model = CardModel(api_key=key, model_name=model)
+    model = CardGenerator(api_key=key, model_name=model)
     try:
         card = model.collect(word, lang)  # pylint: disable=redefined-outer-name
-        click.echo(json.dumps(card, indent=2, ensure_ascii=False))
+        click.echo(card.model_dump_json(indent=2, exclude_none=True))
     except CardError as e:
         click.echo(e)
 
@@ -76,12 +76,12 @@ def _create_deck(
     """Adds cards for new words to the deck at OUTPUT"""
     append = os.path.exists(file)
 
-    model = CardModel(api_key=key, model_name=model_name)
+    model = CardGenerator(api_key=key, model_name=model_name)
     deck = []  # pylint: disable=redefined-outer-name
     with click.progressbar(words) as progress:
         for word in progress:
             try:
-                deck.append(card_format(model.collect(word, lang)))
+                deck.append(model.collect(word, lang).to_csv_row())
             except CardError as e:
                 click.echo(f"Error processing '{word}': {e}")
 
