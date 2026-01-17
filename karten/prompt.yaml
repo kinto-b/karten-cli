@@ -1,85 +1,60 @@
 de:
   lang: German
-  forms: |
-    one of
-      + the plural if it's a noun, (e.g. 'Erinnerungen')
-      + the past participle and simple past if it's a verb, OR 
-      + the comparative and superlative if it's an adjective (e.g. ['witziger', 'am witizgsten']).
+  forms: plural (nouns), past participle + simple past (verbs), or comparative + superlative (adjectives)
   examples:
     -
-      word: abholen
+      word: schaffen
       category: verb
-      definition: ["to pick up"]
-      forms: ["hat abgeholt", "holte ab"]
+      definition: ["to manage (to do something)", "to make it (succeed in doing)", "distinct from 'machen' (to do/make) - 'schaffen' emphasizes successfully completing something difficult"]
+      forms: ["hat geschafft", "schaffte"]
       example: [
-          "Wenn ich mich nicht um die Kinder hätte kümmern müssen, hätte ich dich vom Bahnhof abholen können.",
-          "Er hat gesagt, er habe das Paket bei der Post abgeholt, ohne sich auszuweisen.",
+          "Hast du's noch rechtzeitig geschafft?",
+          "Ich hab gedacht, ich schaff die Prüfung nie, aber irgendwie hab ich's dann doch hingekriegt, auch wenn's echt knapp war."
       ]
       reverse: [
-          "If I hadn't needed to take care of the children, I could have picked you up from the station",
-          "He said he picked the package up from the post office without showing ID."
+          "Did you make it in time?",
+          "I thought I'd never pass the exam, but somehow I managed it after all, even though it was really close."
       ]
     -
-      word: die Schlägerei
-      category: noun
-      definition: ["brawl"]
-      forms: ["die Schlägereien"]
+      word: aufhören
+      category: verb
+      definition: ["to stop (doing something)", "to quit", "distinct from 'stoppen' (to halt/stop something) - 'aufhören' means to cease an ongoing action"]
+      forms: ["hat aufgehört", "hörte auf"]
       example: [
-          "Es gab eine Schlägerei zwischen zwei Männern.",
-          "Nach der Schlägerei in der Bar, die durch einen Streit um ein \
-            Fußballspiel ausgelöst wurde, musste die Polizei eingreifen, \
-            um die wütenden Partygänger zu trennen.",
+          "Kannst du bitte damit aufhören?",
+          "Er wollte schon lange mit dem Rauchen aufhören, aber erst nachdem er gesundheitliche Probleme bekommen hat, hat er's wirklich durchgezogen."
       ]
       reverse: [
-          "There was a brawl between two men.",
-          "After the brawl in the bar, which was triggered by a dispute \
-            over a football match, the police had to intervene to separate \
-            the angry partygoers.",
+          "Can you please stop that?",
+          "He'd wanted to quit smoking for a long time, but only after he got health problems did he really follow through."
       ]
 es:
   lang: Spanish
-  forms: |
-    one of
-      + the plural if it's a noun, (e.g. 'perros')
-      + the present tense conjugations if it's a verb, OR 
-      + the comparative and superlative if it's an adjective (e.g. ['más rápido', 'el más rápido']).
+  forms: plural (nouns), present tense conjugations (verbs), or comparative + superlative (adjectives)
   examples:
     -
-      word: caminar
+      word: quedar
       category: verb
-      definition: ["to walk"]
-      present: ["camino", "caminas", "camina", "caminamos", "camináis", "caminan"]
+      definition: ["to meet up", "to remain/be left", "to fit (clothing)", "distinct from 'quedarse' (to stay) - 'quedar' often implies arranging to meet or how something fits/suits"]
+      forms: ["quedo", "quedas", "queda", "quedamos", "quedáis", "quedan"]
       example: [
-          "Ayer caminé por el parque durante una hora.",
-          "Después de la cena, siempre caminan juntos para relajarse.",
+          "¿Quedamos mañana para tomar algo?",
+          "Después de pagar todas las facturas, me quedaron solo diez euros, así que tuve que cancelar los planes que tenía para el fin de semana."
       ]
       reverse: [
-          "Yesterday I walked through the park for an hour.",
-          "After dinner, they always walk together to relax."
+          "Shall we meet up tomorrow for a drink?",
+          "After paying all the bills, I only had ten euros left, so I had to cancel the plans I had for the weekend."
       ]
     -
-      word: el perro
-      category: noun
-      definition: ["dog"]
-      forms: ["los perros"]
+      word: ponerse
+      category: verb
+      definition: ["to put on (clothing)", "to become (a state/emotion)", "distinct from 'poner' (to put) - 'ponerse' is reflexive and means to put something on yourself or to turn into a state"]
+      forms: ["me pongo", "te pones", "se pone", "nos ponemos", "os ponéis", "se ponen"]
       example: [
-          "El perro ladró toda la noche.",
-          "Los perros corren rápidamente hacia el parque cuando ven la pelota.",
+          "Me voy a poner la chaqueta porque hace frío.",
+          "Cuando le dije que había perdido las entradas del concierto, se puso súper nervioso y empezó a buscarlas por todas partes como loco."
       ]
       reverse: [
-          "The dog barked all night.",
-          "The dogs run quickly toward the park when they see the ball."
-      ]
-    -
-      word: rápido
-      category: adjective
-      definition: ["fast", "quick"]
-      forms: ["más rápido", "el más rápido"]
-      example: [
-          "Este coche es más rápido que el anterior.",
-          "Es el corredor más rápido del equipo.",
-      ]
-      reverse: [
-          "This car is faster than the previous one.",
-          "He is the fastest runner on the team."
+          "I'm going to put on my jacket because it's cold.",
+          "When I told him I'd lost the concert tickets, he got super nervous and started looking for them everywhere like crazy."
       ]
