@@ -21,7 +21,8 @@ def _prompt(lang, forms, examples):
 
 CRITICAL REQUIREMENTS:
 - MUST USE CASUAL SPOKEN {lang}!
-- definition: Give definition(s) in English. Be precise. Explicitly distinguish from similar words (especially prefix variations). Note if formal/informal.
+- THE WORD MUST NOT APPEAR IN THE DEFINITION!
+- definition: Give definition(s) in English. Be precise. Explicitly distinguish from words that SOUND the same. Note more common alternatives if applicable.
 - forms: Include {forms}
 - example: Show varied grammar (cases, tenses, moods). Include one simple + one complex sentence.
 - reverse: Natural English translations.

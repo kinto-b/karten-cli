@@ -5,7 +5,7 @@ de:
     -
       word: schaffen
       category: verb
-      definition: ["to manage (to do something)", "to make it (succeed in doing)", "distinct from 'machen' (to do/make) - 'schaffen' emphasizes successfully completing something difficult"]
+      definition: ["to manage (to do something)", "to make it (succeed in doing)", "(!= 'machen' which is more general)"]
       forms: ["hat geschafft", "schaffte"]
       example: [
           "Hast du's noch rechtzeitig geschafft?",
@@ -16,17 +16,15 @@ de:
           "I thought I'd never pass the exam, but somehow I managed it after all, even though it was really close."
       ]
     -
-      word: aufhören
-      category: verb
-      definition: ["to stop (doing something)", "to quit", "distinct from 'stoppen' (to halt/stop something) - 'aufhören' means to cease an ongoing action"]
-      forms: ["hat aufgehört", "hörte auf"]
+      word: das Zuchthaus
+      category: noun
+      definition: ["prison (for serious crimes, often with hard labor) (!= 'Gefängnis' which is more common and general)"]
+      forms: ["die Zuchthäuser"]
       example: [
-          "Kannst du bitte damit aufhören?",
-          "Er wollte schon lange mit dem Rauchen aufhören, aber erst nachdem er gesundheitliche Probleme bekommen hat, hat er's wirklich durchgezogen."
+        "Er wurde zu zehn Jahren Zuchthaus verurteilt, weil er einen Banküberfall geplant hatte.",
       ]
       reverse: [
-          "Can you please stop that?",
-          "He'd wanted to quit smoking for a long time, but only after he got health problems did he really follow through."
+            "He was sentenced to ten years in prison for planning a bank robbery."
       ]
 es:
   lang: Spanish
@@ -35,20 +33,22 @@ es:
     -
       word: quedar
       category: verb
-      definition: ["to meet up", "to remain/be left", "to fit (clothing)", "distinct from 'quedarse' (to stay) - 'quedar' often implies arranging to meet or how something fits/suits"]
+      definition: ["to meet up", "to remain/be left", "to fit (clothing)"]
       forms: ["quedo", "quedas", "queda", "quedamos", "quedáis", "quedan"]
       example: [
           "¿Quedamos mañana para tomar algo?",
-          "Después de pagar todas las facturas, me quedaron solo diez euros, así que tuve que cancelar los planes que tenía para el fin de semana."
+          "Después de pagar todas las facturas, me quedaron solo diez euros, así que tuve que cancelar los planes que tenía para el fin de semana.",
+          "¿Te queda bien esta camisa? Creo que es un poco grande para mí."
       ]
       reverse: [
           "Shall we meet up tomorrow for a drink?",
-          "After paying all the bills, I only had ten euros left, so I had to cancel the plans I had for the weekend."
+          "After paying all the bills, I only had ten euros left, so I had to cancel the plans I had for the weekend.",
+            "Does this shirt fit you well? I think it's a bit big for me."
       ]
     -
       word: ponerse
       category: verb
-      definition: ["to put on (clothing)", "to become (a state/emotion)", "distinct from 'poner' (to put) - 'ponerse' is reflexive and means to put something on yourself or to turn into a state"]
+      definition: ["to put on (clothing) (!= 'vestirse')", "to become (a state/emotion, esp. involuntarily or suddenly)"]
       forms: ["me pongo", "te pones", "se pone", "nos ponemos", "os ponéis", "se ponen"]
       example: [
           "Me voy a poner la chaqueta porque hace frío.",
