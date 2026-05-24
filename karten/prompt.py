@@ -22,9 +22,9 @@ def _prompt(lang, forms, examples):
 CRITICAL REQUIREMENTS:
 - MUST USE CASUAL SPOKEN {lang}!
 - THE WORD MUST NOT APPEAR IN THE DEFINITION!
-- definition: Give brief definition(s) in English. (If there is a much more common synonym, note it in brackets). Include the article for nouns.
+- definition: List ALL distinct meanings in English, one per entry. (If there is a much more common synonym, note it in brackets). Include the article for nouns.
 - forms: Include {forms}
-- example: Demonstrate the most important collocations. Use varied grammar (cases, tenses, moods)
+- example: Provide one example per distinct meaning in the definition — cover every sense. Use important collocations and varied grammar (cases, tenses, moods).
 - reverse: Natural English translations.
 - Focus on the target word! Only use similar words to clarify!
 

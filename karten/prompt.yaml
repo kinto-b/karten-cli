@@ -3,17 +3,29 @@ de:
   forms: plural (nouns), past participle + simple past (verbs), or comparative + superlative (adjectives)
   examples:
     -
-      word: schaffen
+      word: folgen
       category: verb
-      definition: ["to manage (to do something)"]
-      forms: ["hat geschafft", "schaffte"]
+      definition: [
+        "to follow (s.o./sth. physically or in sequence)",
+        "to follow (a speech/argument) — to keep up with",
+        "to follow (s.o.'s example or lead)",
+        "to follow/obey (orders, instincts)",
+        "to follow/result from (logic) — 'it follows that...'"
+      ]
+      forms: ["ist gefolgt", "folgte"]
       example: [
-          "Hast du's noch rechtzeitig geschafft?",
-          "Ich hab gedacht, ich schaff die Prüfung nie, aber irgendwie hab ich's dann doch hingekriegt, auch wenn's echt knapp war."
+          "Geh schon mal vor, ich folg dir gleich nach.",
+          "Der Rede konnte ich kaum folgen, weil er so schnell geredet hat.",
+          "Sie hat einfach dem Beispiel ihrer Schwester gefolgt und Medizin studiert.",
+          "Er folgt immer seinem Bauchgefühl, egal was andere sagen.",
+          "Daraus folgt, dass wir den Plan komplett überdenken müssen."
       ]
       reverse: [
-          "Did you make it in time?",
-          "I thought I'd never pass the exam, but somehow I managed it after all, even though it was really close."
+          "Go on ahead, I'll follow you in a sec.",
+          "I could barely follow the speech because he was talking so fast.",
+          "She just followed her sister's example and studied medicine.",
+          "He always follows his gut feeling, no matter what others say.",
+          "It follows from this that we need to completely rethink the plan."
       ]
     -
       word: das Zuchthaus

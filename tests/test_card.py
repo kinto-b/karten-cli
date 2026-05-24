@@ -39,6 +39,25 @@ class TestCLI(unittest.TestCase):
         formatted = card_data.to_csv_row()
         self.assertEqual(formatted["definition"], "at once")
 
+    def test_multiple_definitions(self):
+        """Test that multiple definitions are numbered"""
+        multi_def_json = """
+        {
+          "word": "test",
+          "category": "noun",
+          "definition": ["first meaning", "second meaning", "third meaning"],
+          "forms": null,
+          "example": ["example 1"],
+          "reverse": ["reverse 1"]
+        }
+        """
+        card_data = Card.from_json(multi_def_json)
+        formatted = card_data.to_csv_row()
+        self.assertEqual(
+            formatted["definition"],
+            "1. first meaning<br/>2. second meaning<br/>3. third meaning",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
